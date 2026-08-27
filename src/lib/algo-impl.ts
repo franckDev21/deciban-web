@@ -29,14 +29,14 @@ export const implementation: Record<Lang, {
         key: "coverage",
         name: "Couverture attestée",
         cap: "±15 db",
-        file: "app/Services/CoverageScorer.php",
+        file: "deciban/services/coverage.py",
         intent:
           "Le seul signal qu’un adversaire éveillé ne peut pas contourner sans renoncer aux heures qu’il réclame. On tire k contrôles à des instants uniformes dans la fenêtre déclarée, et le taux de réussite estime la fraction réellement assistée.",
         signals: [
           {
             name: "Estimation de la couverture",
             measured: "réussites et échecs sur les contrôles déclenchés",
-            rule: "loi Bêta(réussites + 1, échecs + 1) ; intervalle à 90 % via moyenne ± 1,645 σ",
+            rule: "loi Bêta(réussites + 1, échecs + 1) ; intervalle à 90 % par les quantiles EXACTS de la Bêta",
             db: "moyenne et intervalle affichés",
           },
           {
@@ -57,7 +57,7 @@ export const implementation: Record<Lang, {
         key: "rhythm",
         name: "Rythme de vie",
         cap: "±12 db",
-        file: "app/Services/RhythmScorer.php",
+        file: "deciban/services/rhythm.py",
         intent:
           "Se calcule sur l’historique des sessions, fenêtre glissante de 21 jours. Le signal central n’est pas le sommeil mais la DETTE de sommeil : un humain tient trois jours sans dormir, personne ne tient trois semaines.",
         signals: [
@@ -91,7 +91,7 @@ export const implementation: Record<Lang, {
         key: "provenance",
         name: "Provenance du travail",
         cap: "±10 db",
-        file: "app/Services/ProvenanceScorer.php",
+        file: "deciban/services/provenance.py",
         intent:
           "Mesure la paternité plutôt que la présence : distingue « j’étais là » de « c’est bien moi qui ai produit ça ».",
         signals: [
@@ -119,7 +119,7 @@ export const implementation: Record<Lang, {
         key: "cognition",
         name: "Cognition",
         cap: "±8 db",
-        file: "app/Services/CognitionScorer.php",
+        file: "deciban/services/cognition.py",
         intent:
           "Mesure le rythme de la pensée plutôt que celui du corps. Le signal central exige de modéliser une charge mentale, pas seulement d’ajouter du bruit.",
         signals: [
@@ -153,14 +153,14 @@ export const implementation: Record<Lang, {
         key: "motor",
         name: "Signature motrice",
         cap: "±8 db",
-        file: "app/Services/ProbeScorer.php",
+        file: "deciban/services/motor.py",
         intent:
           "Excellente en laboratoire, mais un simulateur de souris USB coûte une dizaine d’euros : c’est le coût de contournement qui fixe le plafond, pas le pouvoir de discrimination. Sur écran tactile la famille devient non applicable et contribue zéro.",
         signals: [
           {
             name: "Micro-tremblement",
-            measured: "énergie moyenne de la dérivée seconde de la position, approximation de la bande 8–12 Hz du tremblement neuromusculaire",
-            rule: "≥ 0,80 → +5 ; ≥ 0,35 → +3 ; ≥ 0,12 → 0 ; en dessous → −6",
+            measured: "part de la puissance spectrale tombant dans la bande 8–12 Hz, par densité de Welch sur signal rééchantillonné",
+            rule: "≥ 14 % → +5 ; ≥ 9 % → +3 ; ≥ 5 % → 0 ; en dessous → −6. Seuils mesurés : plancher humain 8,1 %, plafond non-humain 8,3 %",
             db: "+5 → −6",
           },
           {
@@ -227,14 +227,14 @@ export const implementation: Record<Lang, {
         key: "coverage",
         name: "Attested coverage",
         cap: "±15 db",
-        file: "app/Services/CoverageScorer.php",
+        file: "deciban/services/coverage.py",
         intent:
           "The only signal an awake adversary cannot defeat without giving up the hours they claim. k checks are drawn at uniform moments inside the declared window, and the success rate estimates the fraction genuinely attended.",
         signals: [
           {
             name: "Coverage estimate",
             measured: "successes and failures across fired checks",
-            rule: "Beta(successes + 1, failures + 1); 90 % interval as mean ± 1.645 σ",
+            rule: "Beta(successes + 1, failures + 1); 90 % interval from the EXACT Beta quantiles",
             db: "mean and interval displayed",
           },
           {
@@ -255,7 +255,7 @@ export const implementation: Record<Lang, {
         key: "rhythm",
         name: "Life rhythm",
         cap: "±12 db",
-        file: "app/Services/RhythmScorer.php",
+        file: "deciban/services/rhythm.py",
         intent:
           "Computed over session history on a rolling 21-day window. The central signal is not sleep but sleep DEBT: a human can go three days without sleeping, nobody lasts three weeks.",
         signals: [
@@ -289,7 +289,7 @@ export const implementation: Record<Lang, {
         key: "provenance",
         name: "Work provenance",
         cap: "±10 db",
-        file: "app/Services/ProvenanceScorer.php",
+        file: "deciban/services/provenance.py",
         intent:
           "Measures authorship rather than presence: separates “I was there” from “I am the one who produced this”.",
         signals: [
@@ -317,7 +317,7 @@ export const implementation: Record<Lang, {
         key: "cognition",
         name: "Cognition",
         cap: "±8 db",
-        file: "app/Services/CognitionScorer.php",
+        file: "deciban/services/cognition.py",
         intent:
           "Measures the rhythm of thought rather than of the body. The central signal requires modelling mental load, not merely adding noise.",
         signals: [
@@ -351,14 +351,14 @@ export const implementation: Record<Lang, {
         key: "motor",
         name: "Motor signature",
         cap: "±8 db",
-        file: "app/Services/ProbeScorer.php",
+        file: "deciban/services/motor.py",
         intent:
           "Excellent in the lab, but a USB mouse jiggler costs about ten euros: the ceiling is set by the cost of defeating it, not by its discriminative power. On a touch screen the family becomes not applicable and contributes zero.",
         signals: [
           {
             name: "Micro-tremor",
-            measured: "mean energy of the second derivative of position, approximating the 8–12 Hz neuromuscular tremor band",
-            rule: "≥ 0.80 → +5; ≥ 0.35 → +3; ≥ 0.12 → 0; below → −6",
+            measured: "share of spectral power falling in the 8–12 Hz band, via Welch density on a resampled signal",
+            rule: "≥ 14 % → +5; ≥ 9 % → +3; ≥ 5 % → 0; below → −6. Measured thresholds: human floor 8.1 %, non-human ceiling 8.3 %",
             db: "+5 → −6",
           },
           {

@@ -39,6 +39,9 @@ const TopBar = forwardRef<HTMLButtonElement, Props>(function TopBar(
         <Link href="/algorithme" className="nav-link no-underline">
           {t.algo}
         </Link>
+        <Link href="/stack" className="nav-link no-underline">
+          {t.stack}
+        </Link>
         <Link href="/session" className="nav-link nav-link-go no-underline">
           {t.session}
         </Link>

@@ -16,6 +16,7 @@ export type Dict = {
     home: string;
     algo: string;
     session: string;
+    stack: string;
   };
   how: {
     dayTitle: string;
@@ -175,6 +176,7 @@ export const content: Record<Lang, Dict> = {
       home: "Accueil",
       algo: "L’algorithme",
       session: "Tester l’outil",
+      stack: "La stack",
     },
 
     how: {
@@ -593,6 +595,7 @@ export const content: Record<Lang, Dict> = {
       home: "Home",
       algo: "The algorithm",
       session: "Try the tool",
+      stack: "The stack",
     },
 
     how: {

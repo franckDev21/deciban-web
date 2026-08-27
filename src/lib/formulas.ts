@@ -103,9 +103,9 @@ export const formulas: Record<Lang, {
         tex: String.raw`c \;\sim\; \mathrm{Beta}\!\left(a+1,\; m+1\right) \qquad \mathbb{E}\left[c\right] \;=\; \frac{a+1}{a+m+2}`,
         reads: "La fraction d’heures réellement assistée suit une loi Bêta après un a priori uniforme, avec l’estimateur de Laplace pour moyenne. Cette ligne est exacte.",
         margin: "On tire les contrôles à des instants uniformes dans la fenêtre déclarée, et le taux de réussite estime la présence. L’espérance ci-contre est exacte.",
-        status: "approx",
+        status: "exact",
         caveat:
-          "L’intervalle AFFICHÉ ne l’est pas. Le code calcule moyenne ± 1,645 σ, une approximation normale d’une loi fortement asymétrique. Sur deux ou trois contrôles elle est franchement mauvaise, et il faut écrêter à [0, 1] pour qu’elle reste dans les bornes, ce qui est l’aveu du problème. La forme correcte est le quantile de la Bêta : F⁻¹(0,05) et F⁻¹(0,95).",
+          "L’intervalle affiché est désormais calculé par la fonction quantile exacte de la Bêta, F⁻¹(0,05) et F⁻¹(0,95). La version précédente employait une approximation normale d’une loi fortement asymétrique, qu’il fallait écrêter à [0, 1] pour la maintenir dans les bornes. Reste que l’a priori uniforme Bêta(1, 1) est un choix, pas une mesure.",
       },
       {
         n: "VI",
@@ -130,12 +130,12 @@ export const formulas: Record<Lang, {
       {
         n: "VIII",
         title: "Le tremblement neuromusculaire",
-        tex: String.raw`E \;=\; \frac{1}{n-2}\sum_{i=3}^{n} \left\lVert\, p_i - 2p_{i-1} + p_{i-2} \,\right\rVert`,
-        reads: "Norme moyenne de la différence seconde discrète de la position du curseur, sur les n − 2 triplets disponibles.",
+        tex: String.raw`R \;=\; \frac{\displaystyle\int_{8}^{12} S(f)\,\mathrm{d}f}{\displaystyle\int_{2}^{20} S(f)\,\mathrm{d}f} \qquad S = \text{densité de Welch}`,
+        reads: "Part de la puissance spectrale tombant dans la bande du tremblement, rapportée à une bande de référence plus large.",
         margin: "Tout système neuromusculaire humain vibre autour de 8 à 12 Hz, et une trajectoire calculée est trop lisse : son énergie tombe près de zéro. C’est ce contraste que la mesure exploite.",
-        status: "approx",
+        status: "exact",
         caveat:
-          "Une différence seconde est un filtre PASSE-HAUT grossier, pas un passe-bande à 8–12 Hz. Elle capte le tremblement, mais aussi la gigue d’échantillonnage et le bruit du capteur. Sa valeur dépend de la cadence des événements du navigateur, qui varie d’une machine à l’autre : E n’est donc pas comparable entre appareils. Isoler la vraie bande demanderait une transformée de Fourier ou un filtre dédié.",
+          "C’est désormais un vrai passe-bande, et non plus une différence seconde qui n’était qu’un passe-haut grossier. Le signal est interpolé sur une grille régulière à 100 Hz avant analyse, puisque les événements du navigateur arrivent à pas irrégulier, et le résultat est un RAPPORT de puissance : il est donc comparable d’une machine à l’autre, ce que l’ancienne mesure ne permettait pas. Réserve restante : l’interpolation linéaire introduit son propre biais, et les seuils sont mesurés sur traces synthétiques.",
       },
       {
         n: "IX",
@@ -176,8 +176,8 @@ export const formulas: Record<Lang, {
         body: "La corrélation latence-difficulté est inerte tant que le défi n’a qu’un seul niveau. La famille des pièges n’existe pas du tout dans le code. Elles figurent ici parce qu’elles font partie du raisonnement, pas parce qu’elles tournent.",
       },
       {
-        title: "L’énergie du tremblement n’est pas comparable entre machines",
-        body: "Elle dépend de la cadence des événements de pointeur, qui varie selon le navigateur, le système et le matériel. Un seuil unique appliqué à tous les appareils est donc bancal. Une normalisation par la fréquence d’échantillonnage est nécessaire.",
+        title: "Les seuils sont mesurés sur des traces synthétiques",
+        body: "Le tremblement est désormais un rapport de puissance, donc comparable d’une machine à l’autre. Mais les frontières qui le transforment en decibans ont été mesurées sur des traces fabriquées, pas sur de vraies personnes. Le plancher humain observé est 8,1 % et le plafond non-humain 8,3 % : la marge est mince, et de vraies données pourraient la refermer.",
       },
       {
         title: "Un score n’est pas une preuve judiciaire",
@@ -248,9 +248,9 @@ export const formulas: Record<Lang, {
         tex: String.raw`c \;\sim\; \mathrm{Beta}\!\left(a+1,\; m+1\right) \qquad \mathbb{E}\left[c\right] \;=\; \frac{a+1}{a+m+2}`,
         reads: "The fraction of hours genuinely attended follows a Beta distribution after a uniform prior, with the Laplace estimator as its mean. This line is exact.",
         margin: "Checks are drawn at uniform moments inside the declared window, and the success rate estimates presence. The expectation opposite is exact.",
-        status: "approx",
+        status: "exact",
         caveat:
-          "The DISPLAYED interval is not. The code computes mean ± 1.645 σ, a normal approximation to a strongly skewed distribution. On two or three checks it is frankly poor, and it has to be clipped to [0, 1] to stay in range, which is the admission of the problem. The correct form is the Beta quantile: F⁻¹(0.05) and F⁻¹(0.95).",
+          "The displayed interval is now computed from the exact Beta quantile function, F⁻¹(0.05) and F⁻¹(0.95). The previous version used a normal approximation to a strongly skewed distribution, which had to be clipped to [0, 1] to stay in range. The uniform Beta(1, 1) prior remains a choice, not a measurement.",
       },
       {
         n: "VI",
@@ -275,12 +275,12 @@ export const formulas: Record<Lang, {
       {
         n: "VIII",
         title: "Neuromuscular tremor",
-        tex: String.raw`E \;=\; \frac{1}{n-2}\sum_{i=3}^{n} \left\lVert\, p_i - 2p_{i-1} + p_{i-2} \,\right\rVert`,
-        reads: "Mean norm of the discrete second difference of cursor position, over the n − 2 available triples.",
+        tex: String.raw`R \;=\; \frac{\displaystyle\int_{8}^{12} S(f)\,\mathrm{d}f}{\displaystyle\int_{2}^{20} S(f)\,\mathrm{d}f} \qquad S = \text{Welch density}`,
+        reads: "Share of spectral power falling in the tremor band, relative to a wider reference band.",
         margin: "Every human neuromuscular system vibrates around 8 to 12 Hz, and a computed trajectory is too smooth: its energy falls close to zero. That contrast is what the measurement exploits.",
-        status: "approx",
+        status: "exact",
         caveat:
-          "A second difference is a crude HIGH-PASS filter, not a band-pass at 8–12 Hz. It picks up tremor, but also sampling jitter and sensor noise. Its value depends on the browser event rate, which varies from machine to machine: E is therefore not comparable across devices. Isolating the true band would require a Fourier transform or a dedicated filter.",
+          "This is now a genuine band-pass, no longer a second difference that was merely a crude high-pass. The signal is interpolated onto a regular 100 Hz grid before analysis, since browser events arrive at irregular intervals, and the result is a power RATIO: it is therefore comparable across machines, which the previous measure was not. Remaining caveat: linear interpolation introduces its own bias, and the thresholds are measured on synthetic traces.",
       },
       {
         n: "IX",
@@ -321,8 +321,8 @@ export const formulas: Record<Lang, {
         body: "The latency-difficulty correlation is inert while the challenge offers a single level. The traps family does not exist in the code at all. They appear here because they are part of the reasoning, not because they run.",
       },
       {
-        title: "Tremor energy is not comparable across machines",
-        body: "It depends on the pointer event rate, which varies with browser, operating system and hardware. A single threshold applied to every device is therefore shaky. Normalisation by sampling frequency is needed.",
+        title: "Thresholds are measured on synthetic traces",
+        body: "Tremor is now a power ratio, and therefore comparable across machines. But the boundaries that turn it into decibans were measured on fabricated traces, not on real people. The observed human floor is 8.1 % and the non-human ceiling 8.3 %: the margin is thin, and real data could close it.",
       },
       {
         title: "A score is not legal proof",
