@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import katex from "katex";
-import type { Plate } from "@/lib/formulas";
+import type { Plate, PlateStatus } from "@/lib/formulas";
 
 function Formula({ tex }: { tex: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -19,6 +19,14 @@ function Formula({ tex }: { tex: string }) {
   return <div ref={ref} className="plate-tex" aria-label={tex} />;
 }
 
+const TONE: Record<PlateStatus, string> = {
+  exact: "var(--pos)",
+  heuristique: "var(--signal)",
+  approx: "var(--signal)",
+  inerte: "var(--ink-3)",
+  absent: "var(--neg)",
+};
+
 export default function ProofSheet({
   eyebrow,
   title,
@@ -27,6 +35,11 @@ export default function ProofSheet({
   legend,
   plates,
   closing,
+  statusLabels,
+  caveatLabel,
+  assumeTitle,
+  assumeLede,
+  assumptions,
 }: {
   eyebrow: string;
   title: string;
@@ -35,6 +48,11 @@ export default function ProofSheet({
   legend: [string, string][];
   plates: Plate[];
   closing: string;
+  statusLabels: Record<PlateStatus, string>;
+  caveatLabel: string;
+  assumeTitle: string;
+  assumeLede: string;
+  assumptions: { title: string; body: string }[];
 }) {
   return (
     <section className="sheet">
@@ -64,14 +82,38 @@ export default function ProofSheet({
                 <div className="plate-head">
                   <span className="plate-n">{p.n}</span>
                   <h3 className="plate-title">{p.title}</h3>
+                  <span className="plate-status" style={{ color: TONE[p.status] }}>
+                    {statusLabels[p.status]}
+                  </span>
                 </div>
                 <Formula tex={p.tex} />
                 <p className="plate-reads">{p.reads}</p>
               </div>
-              <aside className="plate-margin">{p.margin}</aside>
+              <aside className="plate-margin">
+                {p.margin}
+                {p.caveat && (
+                  <span className="plate-caveat">
+                    <strong style={{ color: TONE[p.status] }}>{caveatLabel}. </strong>
+                    {p.caveat}
+                  </span>
+                )}
+              </aside>
             </li>
           ))}
         </ol>
+
+        <div className="sheet-assume">
+          <h3 className="sheet-assume-title">{assumeTitle}</h3>
+          <p className="sheet-assume-lede">{assumeLede}</p>
+          <ol className="sheet-assume-list">
+            {assumptions.map((a) => (
+              <li key={a.title}>
+                <h4>{a.title}</h4>
+                <p>{a.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
 
         <p className="sheet-closing">{closing}</p>
       </div>

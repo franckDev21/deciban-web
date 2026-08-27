@@ -7,7 +7,7 @@ import { useLang } from "@/lib/useLang";
 import { algo, type Block } from "@/lib/algo";
 import { implementation } from "@/lib/algo-impl";
 import ProofSheet from "@/components/ProofSheet";
-import { formulas } from "@/lib/formulas";
+import { formulas, statusLabel } from "@/lib/formulas";
 import "katex/dist/katex.min.css";
 
 export default function Algorithme() {
@@ -100,6 +100,11 @@ export default function Algorithme() {
           legend={f.legend}
           plates={f.plates}
           closing={f.closing}
+          statusLabels={statusLabel[lang]}
+          caveatLabel={f.caveatLabel}
+          assumeTitle={f.assumeTitle}
+          assumeLede={f.assumeLede}
+          assumptions={f.assumptions}
         />
       )}
 
