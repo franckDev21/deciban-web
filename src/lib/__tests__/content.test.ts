@@ -75,6 +75,27 @@ describe("planche de demonstration", () => {
     expect(inactives).toHaveLength(2);
   });
 
+  it("annonce le nombre de signaux et de familles reellement documentes", () => {
+    // Ce test existe parce que ces chiffres ont deja derive : la page
+    // d'accueil annoncait un moteur plus riche que celui qui tourne.
+    for (const lang of ["fr", "en"] as const) {
+      const families = implementation[lang].families;
+      const signals = families.reduce((n, f) => n + f.signals.length, 0);
+
+      const claims = [
+        ...content[lang].hero.meta,
+        ...content[lang].hero.boot.map((b) => b.value),
+      ].filter((v) => /signa/i.test(v));
+
+      expect(claims.length).toBeGreaterThan(0);
+      for (const claim of claims) {
+        const [n, f] = (claim.match(/\d+/g) ?? []).map(Number);
+        expect(n, `${lang} · "${claim}"`).toBe(signals);
+        expect(f, `${lang} · "${claim}"`).toBe(families.length);
+      }
+    }
+  });
+
   it("documente chaque famille avec son fichier source", () => {
     for (const lang of ["fr", "en"] as const) {
       for (const family of implementation[lang].families) {

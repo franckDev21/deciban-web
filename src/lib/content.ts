@@ -328,7 +328,7 @@ export const content: Record<Lang, Dict> = {
           title: "Ça marche aujourd’hui",
           items: [
             "Le capteur de geste dans le navigateur, démontré sur la page d’accueil",
-            "La spécification complète du moteur, 30 signaux en 8 familles",
+            "La spécification complète du moteur, 21 signaux en 5 familles",
             "L’API et le formulaire d’inscription",
             "La simulation détaillée sur cinq profils",
           ],
@@ -366,7 +366,7 @@ export const content: Record<Lang, Dict> = {
       command: "deciban --init",
       boot: [
         { tag: "ok", label: "capteur moteur", value: "chargé", tone: "--pos" },
-        { tag: "ok", label: "moteur de preuve", value: "30 signaux, 8 familles", tone: "--pos" },
+        { tag: "ok", label: "moteur de preuve", value: "21 signaux, 5 familles", tone: "--pos" },
         { tag: "ok", label: "code source", value: "ouvert", tone: "--pos" },
         { tag: "..", label: "calibration", value: "en attente de données réelles", tone: "--accent" },
         { tag: "??", label: "équipe", value: "il manque des gens", tone: "--seal" },
@@ -379,7 +379,7 @@ export const content: Record<Lang, Dict> = {
       portraitYears: "1912 – 1954",
       portraitLine: "À Bletchley Park, il lui fallait mesurer la force d’un indice quand aucun indice ne suffit seul. Il a créé une unité pour ça : le deciban.",
       ctaSpec: "Comment ça marche",
-      meta: ["30 signaux, 8 familles", "Code ouvert", "Aucune installation"],
+      meta: ["21 signaux, 5 familles", "Code ouvert", "Aucune installation"],
     },
 
     sensor: {
@@ -456,7 +456,7 @@ export const content: Record<Lang, Dict> = {
         },
         {
           title: "Backend et data",
-          body: "Laravel pour l’API, et surtout la partie statistique : calibration des poids, estimation de la couverture, courbes de fiabilité.",
+          body: "Python et FastAPI pour l’API, et surtout la partie statistique : calibration des poids, estimation de la couverture, courbes de fiabilité.",
         },
         {
           title: "Red team",
@@ -747,7 +747,7 @@ export const content: Record<Lang, Dict> = {
           title: "Working today",
           items: [
             "The gesture sensor in the browser, demonstrated on the home page",
-            "The full engine specification, 30 signals across 8 families",
+            "The full engine specification, 21 signals across 5 families",
             "The API and the sign-up form",
             "The detailed simulation across five profiles",
           ],
@@ -785,7 +785,7 @@ export const content: Record<Lang, Dict> = {
       command: "deciban --init",
       boot: [
         { tag: "ok", label: "motion sensor", value: "loaded", tone: "--pos" },
-        { tag: "ok", label: "evidence engine", value: "30 signals, 8 families", tone: "--pos" },
+        { tag: "ok", label: "evidence engine", value: "21 signals, 5 families", tone: "--pos" },
         { tag: "ok", label: "source code", value: "open", tone: "--pos" },
         { tag: "..", label: "calibration", value: "awaiting real data", tone: "--accent" },
         { tag: "??", label: "team", value: "people missing", tone: "--seal" },
@@ -798,7 +798,7 @@ export const content: Record<Lang, Dict> = {
       portraitYears: "1912 – 1954",
       portraitLine: "At Bletchley Park he needed to measure the strength of a clue when no single clue is ever enough. He created a unit for it: the deciban.",
       ctaSpec: "How it works",
-      meta: ["30 signals, 8 families", "Open source", "Nothing to install"],
+      meta: ["21 signals, 5 families", "Open source", "Nothing to install"],
     },
 
     sensor: {
@@ -875,7 +875,7 @@ export const content: Record<Lang, Dict> = {
         },
         {
           title: "Backend and data",
-          body: "Laravel for the API, and above all the statistics: calibrating the weights, estimating coverage, building reliability curves.",
+          body: "Python and FastAPI for the API, and above all the statistics: calibrating the weights, estimating coverage, building reliability curves.",
         },
         {
           title: "Red team",

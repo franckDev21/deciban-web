@@ -105,7 +105,7 @@ export const formulas: Record<Lang, {
         margin: "On tire les contrôles à des instants uniformes dans la fenêtre déclarée, et le taux de réussite estime la présence. L’espérance ci-contre est exacte.",
         status: "exact",
         caveat:
-          "L’intervalle affiché est désormais calculé par la fonction quantile exacte de la Bêta, F⁻¹(0,05) et F⁻¹(0,95). La version précédente employait une approximation normale d’une loi fortement asymétrique, qu’il fallait écrêter à [0, 1] pour la maintenir dans les bornes. Reste que l’a priori uniforme Bêta(1, 1) est un choix, pas une mesure.",
+          "L’intervalle affiché est le quantile exact de la Bêta, F⁻¹(0,05) et F⁻¹(0,95), et non une approximation gaussienne : sur deux ou trois contrôles la loi est trop asymétrique pour qu’une gaussienne tienne dans [0, 1]. Réserve réelle : l’a priori uniforme Bêta(1, 1) est un choix, pas une mesure.",
       },
       {
         n: "VI",
@@ -135,7 +135,7 @@ export const formulas: Record<Lang, {
         margin: "Tout système neuromusculaire humain vibre autour de 8 à 12 Hz, et une trajectoire calculée est trop lisse : son énergie tombe près de zéro. C’est ce contraste que la mesure exploite.",
         status: "exact",
         caveat:
-          "C’est désormais un vrai passe-bande, et non plus une différence seconde qui n’était qu’un passe-haut grossier. Le signal est interpolé sur une grille régulière à 100 Hz avant analyse, puisque les événements du navigateur arrivent à pas irrégulier, et le résultat est un RAPPORT de puissance : il est donc comparable d’une machine à l’autre, ce que l’ancienne mesure ne permettait pas. Réserve restante : l’interpolation linéaire introduit son propre biais, et les seuils sont mesurés sur traces synthétiques.",
+          "Les événements du navigateur arrivent à pas irrégulier : le signal est donc interpolé sur une grille régulière à 100 Hz avant toute analyse fréquentielle. Le résultat est un RAPPORT de puissance, sans unité, donc comparable d’une machine à l’autre. Deux réserves : l’interpolation linéaire introduit son propre biais, et les seuils qui transforment ce rapport en decibans sont mesurés sur traces synthétiques, pas sur de vraies personnes.",
       },
       {
         n: "IX",
@@ -250,7 +250,7 @@ export const formulas: Record<Lang, {
         margin: "Checks are drawn at uniform moments inside the declared window, and the success rate estimates presence. The expectation opposite is exact.",
         status: "exact",
         caveat:
-          "The displayed interval is now computed from the exact Beta quantile function, F⁻¹(0.05) and F⁻¹(0.95). The previous version used a normal approximation to a strongly skewed distribution, which had to be clipped to [0, 1] to stay in range. The uniform Beta(1, 1) prior remains a choice, not a measurement.",
+          "The displayed interval is the exact Beta quantile, F⁻¹(0.05) and F⁻¹(0.95), not a Gaussian approximation: on two or three checks the distribution is far too skewed for a Gaussian to stay inside [0, 1]. Real caveat: the uniform Beta(1, 1) prior is a choice, not a measurement.",
       },
       {
         n: "VI",
@@ -280,7 +280,7 @@ export const formulas: Record<Lang, {
         margin: "Every human neuromuscular system vibrates around 8 to 12 Hz, and a computed trajectory is too smooth: its energy falls close to zero. That contrast is what the measurement exploits.",
         status: "exact",
         caveat:
-          "This is now a genuine band-pass, no longer a second difference that was merely a crude high-pass. The signal is interpolated onto a regular 100 Hz grid before analysis, since browser events arrive at irregular intervals, and the result is a power RATIO: it is therefore comparable across machines, which the previous measure was not. Remaining caveat: linear interpolation introduces its own bias, and the thresholds are measured on synthetic traces.",
+          "Browser events arrive at irregular intervals, so the signal is interpolated onto a regular 100 Hz grid before any frequency analysis. The result is a power RATIO, dimensionless, and therefore comparable across machines. Two caveats: linear interpolation introduces its own bias, and the thresholds that turn this ratio into decibans are measured on synthetic traces, not on real people.",
       },
       {
         n: "IX",
