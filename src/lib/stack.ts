@@ -57,9 +57,9 @@ export const stack: Record<Lang, {
           { name: "Python 3.12", role: "langage", why: "Choisi pour scipy, pas pour la vitesse : PHP 8.4 est plus rapide sur ce type de charge." },
           { name: "FastAPI", role: "cadre web", why: "Documentation OpenAPI générée depuis les types, sans fichier à maintenir." },
           { name: "Pydantic v2", role: "validation", why: "Le piège à robots et les bornes de durée sont des règles déclarées, pas du code défensif." },
-          { name: "SQLAlchemy 2", role: "persistance", why: "Un type maison garantit l’UTC dans les deux sens, ce que SQLite ne fait pas." },
+          { name: "SQLAlchemy 2", role: "persistance", why: "Un type maison garantit l’UTC dans les deux sens, ce que SQLite ne fait pas. Le schéma est créé au démarrage : une vraie chaîne de migrations reste à ajouter avant la production." },
           { name: "scipy et numpy", role: "statistiques", why: "Quantiles exacts de la loi Bêta, et vrai passe-bande à 8–12 Hz. C’est la seule vraie raison du passage à Python." },
-          { name: "pytest", role: "tests", why: "56 tests, des seuils de score jusqu’à la non-divulgation des horaires." },
+          { name: "pytest", role: "tests", why: "62 tests, des seuils de score jusqu’à la non-divulgation des horaires." },
         ],
       },
       {
@@ -94,7 +94,7 @@ export const stack: Record<Lang, {
     ciLede: "Rien n’est fusionné sans que la chaîne entière soit passée au vert.",
     ciSteps: [
       { title: "Style et types", body: "Ruff sur le code Python, ESLint sur le front, mypy en avertissement. Un code mal formé ne devient pas une discussion de revue." },
-      { title: "Tests", body: "56 tests Python et 10 tests front. Ils couvrent les seuils du moteur, les plafonds de famille, l’absence de pénalité sur signal manquant et la non-divulgation des horaires." },
+      { title: "Tests", body: "62 tests Python et 16 tests front. Ils couvrent les seuils du moteur, les plafonds de famille, l’absence de pénalité sur signal manquant et la non-divulgation des horaires." },
       { title: "Construction des images", body: "Les deux images Docker sont bâties avec le cache d’Actions, donc une proposition qui casse la construction se voit tout de suite." },
       { title: "Démarrage réel", body: "La pile est lancée pour de vrai et l’on attend que /api/health réponde. Une image qui compile mais ne démarre pas échoue ici." },
     ],
@@ -151,9 +151,9 @@ export const stack: Record<Lang, {
           { name: "Python 3.12", role: "language", why: "Chosen for scipy, not for speed: PHP 8.4 is faster on this kind of workload." },
           { name: "FastAPI", role: "web framework", why: "OpenAPI documentation generated from the types, with no file to maintain." },
           { name: "Pydantic v2", role: "validation", why: "The bot trap and the duration bounds are declared rules, not defensive code." },
-          { name: "SQLAlchemy 2", role: "persistence", why: "A custom type guarantees UTC in both directions, which SQLite does not." },
+          { name: "SQLAlchemy 2", role: "persistence", why: "A custom type guarantees UTC in both directions, which SQLite does not. The schema is created at startup: a real migration chain is still to be added before production." },
           { name: "scipy and numpy", role: "statistics", why: "Exact Beta quantiles, and a genuine 8–12 Hz band-pass. This is the only real reason for moving to Python." },
-          { name: "pytest", role: "tests", why: "56 tests, from score thresholds to the non-disclosure of check schedules." },
+          { name: "pytest", role: "tests", why: "62 tests, from score thresholds to the non-disclosure of check schedules." },
         ],
       },
       {
@@ -188,7 +188,7 @@ export const stack: Record<Lang, {
     ciLede: "Nothing is merged until the whole chain is green.",
     ciSteps: [
       { title: "Style and types", body: "Ruff on the Python code, ESLint on the front end, mypy as a warning. Badly formatted code does not become a review discussion." },
-      { title: "Tests", body: "56 Python tests and 10 front-end tests. They cover engine thresholds, family ceilings, the absence of penalty on a missing signal, and non-disclosure of schedules." },
+      { title: "Tests", body: "62 Python tests and 16 front-end tests. They cover engine thresholds, family ceilings, the absence of penalty on a missing signal, and non-disclosure of schedules." },
       { title: "Image builds", body: "Both Docker images are built with the Actions cache, so a proposal that breaks the build shows up immediately." },
       { title: "Real boot", body: "The stack is genuinely started and we wait for /api/health to answer. An image that compiles but does not run fails here." },
     ],
