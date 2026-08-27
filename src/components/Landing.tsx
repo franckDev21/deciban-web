@@ -105,16 +105,13 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
       <header className="relative overflow-hidden">
         <Guilloche />
         <div className="relative mx-auto max-w-[1140px] px-5 pb-16 pt-14 sm:px-7 sm:pb-20 sm:pt-16">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
             <div className="flex flex-col gap-6">
               <span
                 className="num inline-flex w-fit items-center gap-2 rounded-sm border px-3 py-1.5 text-[0.66rem] uppercase tracking-[0.15em]"
                 style={{ color: "var(--seal)", borderColor: "currentColor" }}
               >
-                <span
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: "currentColor" }}
-                />
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: "currentColor" }} />
                 {t.hero.badge}
               </span>
 
@@ -126,10 +123,7 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
                 </h1>
               )}
 
-              <p
-                className="max-w-[54ch] text-[1.18rem]"
-                style={{ color: "var(--ink-2)" }}
-              >
+              <p className="max-w-[54ch] text-[1.18rem]" style={{ color: "var(--ink-2)" }}>
                 {t.hero.lede}
               </p>
 
@@ -155,6 +149,20 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
               </div>
             </div>
 
+            {/* Portrait grave, pose dans le guillochis comme sur un billet. */}
+            <figure className="portrait">
+              <div className="portrait-plate">
+                <img src="/images/alan-turing.jpeg" alt={t.hero.portraitAlt} />
+              </div>
+              <figcaption className="portrait-cap">
+                <span className="portrait-name">{t.hero.portraitName}</span>
+                <span className="num portrait-years">{t.hero.portraitYears}</span>
+                <p className="portrait-line">{t.hero.portraitLine}</p>
+              </figcaption>
+            </figure>
+          </div>
+
+          <div className="mt-12">
             <LiveSignature t={t.sensor} />
           </div>
         </div>

@@ -42,6 +42,20 @@ export type SessionDict = {
   probeDone: string;
   probeExpired: string;
 
+  keyLabel: string;
+  keyTitle: string;
+  keyBody: string;
+  pushTitle: string;
+  pushOn: string;
+  pushOff: string;
+  pushAsk: string;
+  pushDenied: string;
+  pushWarnTab: string;
+  sysTitle: string;
+  sysDispatcherOn: string;
+  sysDispatcherOff: string;
+  sysHint: string;
+  resume: string;
   emptyTitle: string;
   emptyBody: string;
 
@@ -99,6 +113,20 @@ export const sessionCopy: Record<Lang, SessionDict> = {
     probeDone: "Contrôle validé",
     probeExpired: "Fenêtre expirée",
 
+    keyLabel: "Garde ce lien",
+    keyTitle: "C’est ta seule clé",
+    keyBody: "Mets cette adresse en favori ou envoie-la-toi. Si tu la perds, la session continue côté serveur mais tu ne pourras plus y répondre.",
+    pushTitle: "Notifications",
+    pushOn: "actives · tu peux fermer l’onglet",
+    pushOff: "inactives · garde cet onglet ouvert",
+    pushAsk: "Activer les notifications",
+    pushDenied: "Refusées dans les réglages du navigateur. Autorise-les pour ce site, puis recharge la page.",
+    pushWarnTab: "Sans notifications, tu ne seras prévenu que si cet onglet reste ouvert, même en arrière-plan.",
+    sysTitle: "État du système",
+    sysDispatcherOn: "répartiteur actif",
+    sysDispatcherOff: "répartiteur arrêté · aucun contrôle ne se déclenchera",
+    sysHint: "php artisan deciban:dispatch --watch",
+    resume: "Reprendre ma session",
     emptyTitle: "Aucune session en cours",
     emptyBody: "Ouvre une fenêtre pour commencer à accumuler de la preuve.",
 
@@ -155,6 +183,20 @@ export const sessionCopy: Record<Lang, SessionDict> = {
     probeDone: "Check accepted",
     probeExpired: "Window expired",
 
+    keyLabel: "Keep this link",
+    keyTitle: "It is your only key",
+    keyBody: "Bookmark this address or send it to yourself. If you lose it the session keeps running on the server, but you will no longer be able to answer.",
+    pushTitle: "Notifications",
+    pushOn: "active · you can close the tab",
+    pushOff: "inactive · keep this tab open",
+    pushAsk: "Enable notifications",
+    pushDenied: "Blocked in your browser settings. Allow them for this site, then reload the page.",
+    pushWarnTab: "Without notifications you will only be alerted while this tab stays open, even in the background.",
+    sysTitle: "System status",
+    sysDispatcherOn: "dispatcher running",
+    sysDispatcherOff: "dispatcher stopped · no check will fire",
+    sysHint: "php artisan deciban:dispatch --watch",
+    resume: "Resume my session",
     emptyTitle: "No session running",
     emptyBody: "Open a window to start gathering evidence.",
 

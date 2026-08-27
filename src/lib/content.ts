@@ -85,6 +85,10 @@ export type Dict = {
     ctaJoin: string;
     ctaSpec: string;
     ctaTry: string;
+    portraitAlt: string;
+    portraitName: string;
+    portraitYears: string;
+    portraitLine: string;
     meta: string[];
   };
   sensor: {
@@ -368,6 +372,10 @@ export const content: Record<Lang, Dict> = {
       lede: "Un outil libre qui donne aux vrais travailleurs un moyen de prouver qu’ils sont humains. Il ne dénonce personne. Il accumule des preuves, les pèse, et annonce combien il en a.",
       ctaJoin: "Rejoindre l’équipe",
       ctaTry: "Tester l’outil maintenant",
+      portraitAlt: "Portrait photographique d’Alan Turing",
+      portraitName: "Alan Turing",
+      portraitYears: "1912 – 1954",
+      portraitLine: "À Bletchley Park, il lui fallait mesurer la force d’un indice quand aucun indice ne suffit seul. Il a créé une unité pour ça : le deciban.",
       ctaSpec: "Comment ça marche",
       meta: ["30 signaux, 8 familles", "Code ouvert", "Aucune installation"],
     },
@@ -782,6 +790,10 @@ export const content: Record<Lang, Dict> = {
       lede: "A free tool that gives people who really do the work a way to prove they are human. It reports on nobody. It gathers evidence, weighs it, and tells you how much it has.",
       ctaJoin: "Join the team",
       ctaTry: "Try the tool now",
+      portraitAlt: "Photographic portrait of Alan Turing",
+      portraitName: "Alan Turing",
+      portraitYears: "1912 – 1954",
+      portraitLine: "At Bletchley Park he needed to measure the strength of a clue when no single clue is ever enough. He created a unit for it: the deciban.",
       ctaSpec: "How it works",
       meta: ["30 signals, 8 families", "Open source", "Nothing to install"],
     },

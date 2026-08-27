@@ -426,3 +426,118 @@ table.cat .r {
   .nav-link, .lang-switch, .why-link { padding: 10px 13px; }
   .field { padding: 14px 13px; font-size: 16px; }  /* 16px evite le zoom iOS */
 }
+
+/* ── Adresse de session, a garder ────────────────────────── */
+.session-url {
+  font-size: 0.76rem;
+  color: var(--accent);
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 7px 10px;
+  word-break: break-all;
+  max-width: 100%;
+}
+
+/* ── Portrait grave, traite comme sur un titre de valeur ─── */
+.portrait {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.portrait-plate {
+  position: relative;
+  width: 100%;
+  max-width: 268px;
+  aspect-ratio: 479 / 640;
+}
+
+.portrait-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Le tirage devient une gravure : contraste tenu, grain neutralise. */
+  /* Assombri franchement : le fond de studio doit rejoindre le noir de
+     la page au lieu de former un bloc pale. */
+  filter: grayscale(1) contrast(1.42) brightness(0.7);
+  /* Les bords se dissolvent dans la page : pas de rectangle blanc colle
+     sur le fond, le portrait flotte comme sur un billet. */
+  /* Double fondu : une ellipse pour les cotes, un degrade vertical pour
+     effacer la coupe franche du haut et du bas. */
+  -webkit-mask-image:
+    radial-gradient(ellipse 62% 70% at 50% 40%, #000 20%, rgba(0,0,0,.55) 54%, transparent 82%),
+    linear-gradient(#0000 0%, #000 16%, #000 74%, #0000 99%);
+  mask-image:
+    radial-gradient(ellipse 62% 70% at 50% 40%, #000 20%, rgba(0,0,0,.55) 54%, transparent 82%),
+    linear-gradient(#0000 0%, #000 16%, #000 74%, #0000 99%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* Teinte du portrait dans la couleur de la direction. */
+.portrait-plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: color;
+  opacity: 0.3;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 50% 40%, #000 20%, transparent 82%);
+  mask-image: radial-gradient(ellipse 62% 70% at 50% 40%, #000 20%, transparent 82%);
+}
+
+.portrait-cap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 42ch;
+  border-left: 2px solid var(--seal);
+  padding-left: 15px;
+}
+.portrait-name {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: -0.015em;
+}
+.portrait-years {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.portrait-line {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-top: 5px;
+}
+
+@media (max-width: 1023px) {
+  .portrait { flex-direction: row; align-items: center; gap: 22px; }
+  .portrait-plate { max-width: 170px; flex: none; }
+}
+@media (max-width: 520px) {
+  .portrait { flex-direction: column; align-items: flex-start; }
+  .portrait-plate { max-width: 200px; }
+}
+
+/* Le portrait suit la direction Phosphore comme le reste. */
+.da-phosphore .portrait-name { font-family: var(--f-display); font-weight: 800; }
+
+/* En theme clair le portrait redevient un tirage sur papier : assombrir
+   ne servirait a rien, c'est le fond de studio qui doit rejoindre la page. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .portrait-plate img {
+    filter: grayscale(1) contrast(1.12) brightness(1.02);
+  }
+  :root:not([data-theme="dark"]) .portrait-plate::after { opacity: 0.16; }
+}
+:root[data-theme="light"] .portrait-plate img {
+  filter: grayscale(1) contrast(1.12) brightness(1.02);
+}
+:root[data-theme="light"] .portrait-plate::after { opacity: 0.16; }
