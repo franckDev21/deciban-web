@@ -6,6 +6,15 @@ import type { SessionDict } from "@/lib/session";
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 
 /** Un ecran tactile ne produit pas de signal moteur comparable a une souris. */
+/** On compare le sens, pas la typographie : accents et casse ne bloquent pas. */
+const normalise = (v: string) =>
+  v
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+
 const isTouch = () =>
   typeof window !== "undefined" &&
   (window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
@@ -17,11 +26,13 @@ export default function ProbeChallenge({
   probeToken,
   expiresIn,
   onDone,
+  onDismiss,
 }: {
   t: SessionDict;
   probeToken: string;
   expiresIn: number;
   onDone: (payload: unknown) => void;
+  onDismiss: () => void;
 }) {
   const [left, setLeft] = useState(expiresIn);
   const [typed, setTyped] = useState("");
@@ -120,6 +131,22 @@ export default function ProbeChallenge({
     return () => clearInterval(id);
   }, []);
 
+  /* ── Une sortie, toujours ── */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onDismiss();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onDismiss]);
+
+  /* Un controle expire ne doit pas rester bloque a l'ecran. */
+  useEffect(() => {
+    if (left > 0) return;
+    const id = setTimeout(onDismiss, 6000);
+    return () => clearTimeout(id);
+  }, [left, onDismiss]);
+
   async function send() {
     setSending(true);
     setError(null);
@@ -153,21 +180,28 @@ export default function ProbeChallenge({
     }
   }
 
-  const ready = typed.trim().length >= 6 && events.current.length > 20;
+  const expired = left === 0;
+  const matches = normalise(typed) === normalise(t.probePhrase);
+  const ready = matches && events.current.length > 20 && !expired;
 
   return (
-    <div className="probe-overlay">
+    <div className="probe-overlay" onClick={(e) => { if (e.target === e.currentTarget) onDismiss(); }}>
       <div className="probe-panel card">
         <div className="probe-head">
-          <span className="eyebrow" style={{ color: "var(--seal)" }}>
-            {t.probeTitle}
+          <span className="eyebrow" style={{ color: expired ? "var(--neg)" : "var(--seal)" }}>
+            {expired ? t.probeExpired : t.probeTitle}
           </span>
-          <span
-            className="num probe-clock"
-            style={{ color: left <= 20 ? "var(--neg)" : "var(--accent)" }}
-          >
-            {left} {t.probeLeft}
-          </span>
+          <div className="flex items-center gap-4">
+            <span
+              className="num probe-clock"
+              style={{ color: left <= 20 ? "var(--neg)" : "var(--accent)" }}
+            >
+              {left} {t.probeLeft}
+            </span>
+            <button className="probe-close" onClick={onDismiss} aria-label={t.probeClose}>
+              ×
+            </button>
+          </div>
         </div>
 
         <p style={{ color: "var(--ink-2)" }}>{t.probeLede}</p>
@@ -186,10 +220,22 @@ export default function ProbeChallenge({
             className="field"
             value={typed}
             autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            disabled={expired}
             onPaste={() => setPasted(true)}
             onChange={(e) => setTyped(e.target.value)}
             placeholder="…"
           />
+          {typed.length > 0 && (
+            <span
+              className="num text-[0.74rem]"
+              style={{ color: matches ? "var(--pos)" : "var(--ink-3)" }}
+            >
+              {matches ? t.probeMatch : t.probeNoMatch}
+            </span>
+          )}
         </div>
 
         {error && (
@@ -198,9 +244,20 @@ export default function ProbeChallenge({
           </span>
         )}
 
-        <button className="btn" onClick={send} disabled={!ready || sending || left === 0}>
-          {left === 0 ? t.probeExpired : sending ? "…" : t.probeSend}
-        </button>
+        {expired ? (
+          <div className="flex flex-col gap-3">
+            <p className="num text-[0.82rem]" style={{ color: "var(--neg)" }}>
+              {t.probeExpiredBody}
+            </p>
+            <button className="btn" onClick={onDismiss}>
+              {t.probeClose}
+            </button>
+          </div>
+        ) : (
+          <button className="btn" onClick={send} disabled={!ready || sending}>
+            {sending ? "…" : t.probeSend}
+          </button>
+        )}
       </div>
     </div>
   );

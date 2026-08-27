@@ -5,10 +5,16 @@ import { useState } from "react";
 import TopBar from "@/components/TopBar";
 import { useLang } from "@/lib/useLang";
 import { algo, type Block } from "@/lib/algo";
+import { implementation } from "@/lib/algo-impl";
+import ProofSheet from "@/components/ProofSheet";
+import { formulas } from "@/lib/formulas";
+import "katex/dist/katex.min.css";
 
 export default function Algorithme() {
   const { lang, t, switchLang } = useLang();
   const a = algo[lang];
+  const impl = implementation[lang];
+  const f = formulas[lang];
   const [deep, setDeep] = useState(false);
 
   const blocks: Block[] = deep ? a.deep : a.simple;
@@ -83,6 +89,105 @@ export default function Algorithme() {
           ))}
         </ol>
       </section>
+
+      {/* Planche de demonstration : les formules, pour qui veut verifier */}
+      {deep && (
+        <ProofSheet
+          eyebrow={f.eyebrow}
+          title={f.title}
+          lede={f.lede}
+          legendTitle={f.legendTitle}
+          legend={f.legend}
+          plates={f.plates}
+          closing={f.closing}
+        />
+      )}
+
+      {/* L'algorithme reellement implemente */}
+      {deep && (
+        <section
+          className="mx-auto max-w-[1140px] border-t px-5 py-14 sm:px-7 sm:py-16"
+          style={{ borderColor: "var(--rule)" }}
+        >
+          <div className="mb-9 flex flex-col gap-3">
+            <span className="eyebrow" style={{ color: "var(--pos)" }}>
+              {impl.cap} · {impl.file}
+            </span>
+            <h2 className="text-[clamp(1.5rem,3.2vw,2.05rem)] font-semibold">
+              {impl.title}
+            </h2>
+            <p className="max-w-[66ch] text-[1.08rem]" style={{ color: "var(--ink-2)" }}>
+              {impl.lede}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-8">
+            {impl.families.map((f) => (
+              <div key={f.key} className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                  <h3 className="text-[1.2rem] font-semibold">{f.name}</h3>
+                  <span
+                    className="num rounded-sm border px-2 py-0.5 text-[0.72rem]"
+                    style={{ color: "var(--accent)", borderColor: "currentColor" }}
+                  >
+                    {f.cap}
+                  </span>
+                  <code className="num text-[0.72rem]" style={{ color: "var(--ink-3)" }}>
+                    {f.file}
+                  </code>
+                </div>
+
+                <p className="max-w-[70ch] text-[0.98rem]" style={{ color: "var(--ink-2)" }}>
+                  {f.intent}
+                </p>
+
+                <div className="cat-scroll">
+                  <table className="cat">
+                    <thead>
+                      <tr>
+                        <th>{impl.cols[0]}</th>
+                        <th>{impl.cols[1]}</th>
+                        <th>{impl.cols[2]}</th>
+                        <th className="r">{impl.cols[3]}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {f.signals.map((sig) => (
+                        <tr key={sig.name}>
+                          <td className="fam">{sig.name}</td>
+                          <td style={{ color: "var(--ink-2)" }}>{sig.measured}</td>
+                          <td style={{ color: "var(--ink-2)" }}>{sig.rule}</td>
+                          <td className="r" style={{ color: "var(--accent)" }}>{sig.db}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-col gap-3">
+            <h3 className="text-[1.2rem] font-semibold">{impl.verdictTitle}</h3>
+            <p className="max-w-[66ch]" style={{ color: "var(--ink-2)" }}>
+              {impl.verdictLede}
+            </p>
+            <div className="cat-scroll mt-2">
+              <table className="cat">
+                <tbody>
+                  {impl.verdictRows.map(([range, label, note]) => (
+                    <tr key={range}>
+                      <td className="r" style={{ color: "var(--accent)", width: "130px" }}>{range}</td>
+                      <td className="fam">{label}</td>
+                      <td style={{ color: "var(--ink-2)" }}>{note}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Les familles */}
       <section

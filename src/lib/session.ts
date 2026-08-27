@@ -41,6 +41,12 @@ export type SessionDict = {
   probeLeft: string;
   probeDone: string;
   probeExpired: string;
+  probeExpiredBody: string;
+  probeClose: string;
+  probeMatch: string;
+  probeNoMatch: string;
+  notifBlockedTitle: string;
+  notifBlockedBody: string;
 
   keyLabel: string;
   keyTitle: string;
@@ -112,6 +118,12 @@ export const sessionCopy: Record<Lang, SessionDict> = {
     probeLeft: "secondes restantes",
     probeDone: "Contrôle validé",
     probeExpired: "Fenêtre expirée",
+    probeExpiredBody: "Ce contrôle est compté comme manqué. Ta couverture baisse, mais les suivants restent à jouer.",
+    probeClose: "Fermer",
+    probeMatch: "phrase correcte",
+    probeNoMatch: "recopie la phrase exactement, les accents et la casse sont ignorés",
+    notifBlockedTitle: "Tu entends le son mais tu ne vois rien ?",
+    notifBlockedBody: "Le son est joué par la page, la bulle vient du système. Si tu n’as que le son, c’est que les notifications sont bloquées : soit dans le navigateur pour ce site, soit dans les réglages de ton ordinateur (mode Concentration ou Ne pas déranger sur macOS).",
 
     keyLabel: "Garde ce lien",
     keyTitle: "C’est ta seule clé",
@@ -182,6 +194,12 @@ export const sessionCopy: Record<Lang, SessionDict> = {
     probeLeft: "seconds left",
     probeDone: "Check accepted",
     probeExpired: "Window expired",
+    probeExpiredBody: "This check counts as missed. Your coverage drops, but the remaining checks are still to play.",
+    probeClose: "Close",
+    probeMatch: "sentence matches",
+    probeNoMatch: "retype the sentence exactly; accents and case are ignored",
+    notifBlockedTitle: "Hearing the sound but seeing nothing?",
+    notifBlockedBody: "The sound comes from the page, the banner comes from your system. If you only get the sound, notifications are blocked: either in the browser for this site, or in your computer settings (Focus or Do Not Disturb on macOS).",
 
     keyLabel: "Keep this link",
     keyTitle: "It is your only key",

@@ -2,7 +2,24 @@ import type { Lang } from "@/lib/content";
 
 export type Block = { title: string; body: string[]; formula?: string };
 
+export type Signal = {
+  name: string;
+  measured: string;
+  rule: string;
+  db: string;
+};
+
+export type Family = {
+  key: string;
+  name: string;
+  cap: string;
+  file: string;
+  intent: string;
+  signals: Signal[];
+};
+
 export type AlgoDict = {
+
   eyebrow: string;
   title: string;
   lede: string;

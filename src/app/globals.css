@@ -157,15 +157,22 @@ h1, h2, h3, h4 {
 }
 
 .why-link {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; border: 1px solid var(--seal); color: var(--seal);
-  border-radius: 2px; padding: 6px 13px;
-  font-family: var(--f-data); font-size: 0.7rem;
-  letter-spacing: 0.11em; text-transform: uppercase;
-  cursor: pointer; transition: background 0.16s, color 0.16s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 0;
+  padding: 4px 0;
+  color: var(--seal);
+  font-family: var(--f-data);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.16s, opacity 0.16s;
 }
-.why-link:hover { background: var(--seal); color: var(--ground); }
-.why-link:hover .why-dot { background: var(--ground); }
+.why-link:hover { border-bottom-color: var(--seal); }
 .why-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
 .why-nudge { animation: whyPulse 1.5s ease-out 3; }
 @keyframes whyPulse {
@@ -177,22 +184,35 @@ h1, h2, h3, h4 {
 @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
 .nav-link {
-  display: inline-flex; align-items: center;
-  border: 1px solid var(--rule-strong); color: var(--ink-2);
-  border-radius: 2px; padding: 6px 13px;
-  font-family: var(--f-data); font-size: 0.7rem;
-  letter-spacing: 0.11em; text-transform: uppercase;
-  transition: border-color 0.16s, color 0.16s;
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 4px 0;
+  color: var(--ink-2);
+  font-family: var(--f-data);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.16s, border-color 0.16s;
 }
-.nav-link:hover { border-color: var(--ink-3); color: var(--ink); }
+.nav-link:hover { color: var(--ink); border-bottom-color: var(--ink-3); }
+.nav-link-go { color: var(--pos); margin-left: auto; }
+.nav-link-go:hover { color: var(--pos); border-bottom-color: var(--pos); }
 
 .lang-switch {
-  background: transparent; border: 1px solid var(--rule-strong); color: var(--ink-2);
-  border-radius: 2px; padding: 6px 12px;
-  font-family: var(--f-data); font-size: 0.7rem; letter-spacing: 0.12em;
-  cursor: pointer; transition: border-color 0.16s, color 0.16s;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 4px 0;
+  color: var(--ink-3);
+  font-family: var(--f-data);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.16s, border-color 0.16s;
 }
-.lang-switch:hover { border-color: var(--ink-3); color: var(--ink); }
+.lang-switch:hover { color: var(--ink); border-bottom-color: var(--ink-3); }
 
 .timeline {
   display: flex; flex-direction: column;
@@ -541,3 +561,159 @@ table.cat .r {
   filter: grayscale(1) contrast(1.12) brightness(1.02);
 }
 :root[data-theme="light"] .portrait-plate::after { opacity: 0.16; }
+
+/* ── Sortie du controle ──────────────────────────────────── */
+.probe-close {
+  background: transparent;
+  border: 0;
+  color: var(--ink-3);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.probe-close:hover { color: var(--ink); background: var(--surface-2); }
+
+/* ═══ Planche de demonstration ═══
+   Une feuille de papier millimetre posee dans la page : le pendant
+   savant du guillochis, meme famille visuelle, autre usage. */
+.sheet {
+  border-top: 1px solid var(--rule);
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--sheet-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sheet-grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(#000 0%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(#000 0%, #000 82%, transparent 100%);
+}
+:root { --sheet-grid: rgba(30, 58, 110, 0.055); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --sheet-grid: rgba(110, 159, 224, 0.055); }
+}
+:root[data-theme="dark"] { --sheet-grid: rgba(110, 159, 224, 0.055); }
+.da-phosphore { --sheet-grid: rgba(255, 180, 84, 0.05); }
+
+.sheet-inner {
+  position: relative;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 62px 26px 66px;
+}
+@media (max-width: 640px) { .sheet-inner { padding: 46px 17px 50px; } }
+
+.sheet-head { display: flex; flex-direction: column; gap: 13px; max-width: 66ch; }
+.sheet-eyebrow { color: var(--seal); }
+.sheet-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.05rem);
+  font-weight: 600;
+}
+.sheet-lede { font-size: 1.1rem; color: var(--ink-2); }
+
+/* Notations, en tete de planche comme dans un article */
+.sheet-legend {
+  margin: 34px 0 8px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.sheet-legend dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(252px, 1fr));
+  gap: 11px 30px;
+}
+.sheet-legend dl > div { display: flex; gap: 12px; align-items: baseline; }
+.sheet-legend dt {
+  font-family: "KaTeX_Math", var(--f-data), serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--accent);
+  min-width: 3.4ch;
+  flex: none;
+}
+.sheet-legend dd {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+/* Les planches */
+.plates { list-style: none; margin: 0; padding: 0; }
+.plate {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 34px;
+  padding: 34px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.plate:last-child { border-bottom: 0; }
+@media (max-width: 900px) { .plate { grid-template-columns: 1fr; gap: 18px; } }
+
+.plate-body { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
+.plate-head { display: flex; align-items: baseline; gap: 15px; }
+.plate-n {
+  font-family: var(--f-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--seal);
+  min-width: 3.2ch;
+  flex: none;
+}
+.plate-title { font-size: 1.12rem; font-weight: 600; }
+
+.plate-tex {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 4px;
+  color: var(--ink);
+  border-left: 2px solid var(--seal);
+  padding-left: 20px;
+}
+.plate-tex .katex-display { margin: 0; text-align: left; }
+.plate-tex .katex { font-size: 1.32rem; }
+@media (max-width: 640px) { .plate-tex .katex { font-size: 1.05rem; } }
+
+.plate-reads {
+  font-size: 0.94rem;
+  color: var(--ink-2);
+  max-width: 60ch;
+  padding-left: 22px;
+}
+
+/* L'annotation de marge : le pourquoi, a cote du quoi */
+.plate-margin {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--ink-3);
+  border-left: 1px solid var(--rule-strong);
+  padding-left: 20px;
+}
+@media (max-width: 900px) {
+  .plate-margin { border-left: 0; border-top: 1px solid var(--rule); padding: 15px 0 0 22px; }
+}
+
+.sheet-closing {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule-strong);
+  max-width: 72ch;
+  font-size: 0.96rem;
+  color: var(--ink-2);
+}

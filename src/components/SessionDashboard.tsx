@@ -37,6 +37,10 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
 
   const titleFlash = useRef<ReturnType<typeof setInterval> | null>(null);
   const notified = useRef<string | null>(null);
+  // Un controle ecarte a la main ne doit pas revenir au sondage suivant :
+  // il sera compte comme manque par le serveur, et c'est le choix de la
+  // personne. Le harceler serait pire que le manque lui-meme.
+  const dismissed = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     window.localStorage.setItem(KEY, token);
@@ -57,7 +61,7 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
       const data = await res.json();
       setOnline(true);
       setReport(data.session);
-      setDue(data.due);
+      setDue(data.due && dismissed.current.has(data.due.token) ? null : data.due);
     } catch {
       setOnline(false);
     }
@@ -137,6 +141,7 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
       /* audio bloqué par le navigateur */
     }
 
+    if (titleFlash.current) clearInterval(titleFlash.current);
     titleFlash.current = setInterval(() => {
       document.title = document.title.startsWith("●") ? "Deciban" : "● CONTRÔLE · Deciban";
     }, 800);
@@ -206,6 +211,13 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
           <span className="num text-[0.78rem]" style={{ color: "var(--ink-3)" }}>{s.pushWarnTab}</span>
         )}
       </div>
+
+      {perm !== "granted" && (
+        <div className="card flex flex-col gap-2 p-5" style={{ borderLeft: "3px solid var(--neg)" }}>
+          <span className="eyebrow" style={{ color: "var(--neg)" }}>{s.notifBlockedTitle}</span>
+          <p className="text-[0.95rem]" style={{ color: "var(--ink-2)" }}>{s.notifBlockedBody}</p>
+        </div>
+      )}
 
       {/* État du système */}
       {health && (
@@ -296,6 +308,10 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
           onDone={() => {
             setDue(null);
             poll();
+          }}
+          onDismiss={() => {
+            dismissed.current.add(due.token);
+            setDue(null);
           }}
         />
       )}
