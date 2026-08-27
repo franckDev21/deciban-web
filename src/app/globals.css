@@ -769,3 +769,82 @@ table.cat .r {
 }
 .sheet-assume-list h4 { font-size: 0.98rem; font-weight: 600; }
 .sheet-assume-list p { font-size: 0.88rem; line-height: 1.6; color: var(--ink-2); }
+
+/* ── Sélecteur de langue au globe ────────────────────────── */
+.lang-box { position: relative; margin-left: auto; }
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 4px 0;
+  color: var(--ink-3);
+  font-family: var(--f-data);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.16s, border-color 0.16s;
+}
+.lang-switch:hover,
+.lang-switch[aria-expanded="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--ink-3);
+}
+
+.globe { width: 15px; height: 15px; flex: none; }
+.lang-code { line-height: 1; }
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 9px);
+  right: 0;
+  z-index: 40;
+  min-width: 168px;
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.lang-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 11px 14px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink-2);
+  font-family: var(--f-data);
+  font-size: 0.8rem;
+  transition: background 0.14s, color 0.14s;
+}
+.lang-item:last-child { border-bottom: 0; }
+.lang-item:hover { background: var(--surface-2); color: var(--ink); }
+.lang-item[aria-checked="true"] { color: var(--accent); }
+.lang-item[aria-checked="true"]::after {
+  content: "·";
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.lang-item-code {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  min-width: 2.4ch;
+  color: var(--ink-3);
+}
+.lang-item[aria-checked="true"] .lang-item-code { color: var(--accent); }
+.lang-item-label { font-size: 0.82rem; }
+
+/* La direction Phosphore garde ses crochets ailleurs, pas ici. */
+.da-phosphore .lang-switch::before,
+.da-phosphore .lang-switch::after { content: none; }

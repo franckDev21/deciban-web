@@ -11,7 +11,7 @@ import { formulas, statusLabel } from "@/lib/formulas";
 import "katex/dist/katex.min.css";
 
 export default function Algorithme() {
-  const { lang, t, switchLang } = useLang();
+  const { lang, t, selectLang } = useLang();
   const a = algo[lang];
   const impl = implementation[lang];
   const f = formulas[lang];
@@ -21,7 +21,7 @@ export default function Algorithme() {
 
   return (
     <main>
-      <TopBar t={t.nav} onSwitchLang={switchLang} variant="page" />
+      <TopBar t={t.nav} lang={lang} onSelectLang={selectLang} variant="page" />
 
       <header className="mx-auto max-w-[1140px] px-5 pb-10 pt-14 sm:px-7 sm:pt-16">
         <div className="flex flex-col gap-4">

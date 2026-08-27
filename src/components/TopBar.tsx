@@ -2,18 +2,20 @@
 
 import Link from "next/link";
 import { forwardRef } from "react";
-import type { Dict } from "@/lib/content";
+import LangSwitch from "@/components/LangSwitch";
+import type { Dict, Lang } from "@/lib/content";
 
 type Props = {
   t: Dict["nav"];
-  onSwitchLang: () => void;
+  lang: Lang;
+  onSelectLang: (next: Lang) => void;
   onOpenStory?: () => void;
   nudge?: boolean;
   variant?: "home" | "page";
 };
 
 const TopBar = forwardRef<HTMLButtonElement, Props>(function TopBar(
-  { t, onSwitchLang, onOpenStory, nudge, variant = "home" },
+  { t, lang, onSelectLang, onOpenStory, nudge, variant = "home" },
   whyRef,
 ) {
   return (
@@ -46,9 +48,7 @@ const TopBar = forwardRef<HTMLButtonElement, Props>(function TopBar(
           {t.session}
         </Link>
 
-        <button onClick={onSwitchLang} className="lang-switch" aria-label={t.langLabel}>
-          {t.langShort}
-        </button>
+        <LangSwitch lang={lang} onSelect={onSelectLang} label={t.langLabel} />
       </nav>
     </div>
   );

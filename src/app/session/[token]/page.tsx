@@ -12,12 +12,12 @@ export default function SessionByToken({
   params: Promise<{ token: string }>;
 }) {
   const { token } = use(params);
-  const { t: nav, switchLang, lang } = useLang();
+  const { t: nav, selectLang, lang } = useLang();
   const s = sessionCopy[lang];
 
   return (
     <main>
-      <TopBar t={nav.nav} onSwitchLang={switchLang} variant="page" />
+      <TopBar t={nav.nav} lang={lang} onSelectLang={selectLang} variant="page" />
       <section className="mx-auto max-w-[1140px] px-5 py-12 sm:px-7 sm:py-14">
         <div className="mb-8 flex flex-col gap-3">
           <span className="eyebrow" style={{ color: "var(--pos)" }}>{s.eyebrow}</span>

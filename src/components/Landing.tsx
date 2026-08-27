@@ -54,8 +54,7 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
     return () => clearTimeout(stop);
   }, []);
 
-  const switchLang = () => {
-    const next: Lang = lang === "fr" ? "en" : "fr";
+  const selectLang = (next: Lang) => {
     setLang(next);
     try {
       window.localStorage.setItem(LANG_KEY, next);
@@ -95,7 +94,8 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
       <TopBar
         ref={whyRef}
         t={t.nav}
-        onSwitchLang={switchLang}
+        lang={lang}
+        onSelectLang={selectLang}
         onOpenStory={openStory}
         nudge={nudge}
         variant="home"

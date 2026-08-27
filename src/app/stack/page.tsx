@@ -10,12 +10,12 @@ const METHOD_TONE: Record<string, string> = {
 };
 
 export default function StackPage() {
-  const { t: nav, switchLang, lang } = useLang();
+  const { t: nav, selectLang, lang } = useLang();
   const s = stack[lang];
 
   return (
     <main>
-      <TopBar t={nav.nav} onSwitchLang={switchLang} variant="page" />
+      <TopBar t={nav.nav} lang={lang} onSelectLang={selectLang} variant="page" />
 
       <header className="mx-auto max-w-[1140px] px-5 pb-10 pt-14 sm:px-7 sm:pt-16">
         <div className="flex flex-col gap-4">

@@ -23,7 +23,7 @@ export default function Attestation({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const { t: nav, switchLang, lang } = useLang();
+  const { t: nav, selectLang, lang } = useLang();
   const s = sessionCopy[lang];
 
   const [report, setReport] = useState<Report | null>(null);
@@ -40,7 +40,7 @@ export default function Attestation({
 
   return (
     <main>
-      <TopBar t={nav.nav} onSwitchLang={switchLang} variant="page" />
+      <TopBar t={nav.nav} lang={lang} onSelectLang={selectLang} variant="page" />
 
       <section className="mx-auto max-w-[1140px] px-5 py-14 sm:px-7 sm:py-16">
         {missing ? (

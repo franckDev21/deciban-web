@@ -6,12 +6,12 @@ import DayTimeline from "@/components/DayTimeline";
 import { useLang } from "@/lib/useLang";
 
 export default function HowItWorks() {
-  const { t, switchLang } = useLang();
+  const { t, selectLang, lang } = useLang();
   const h = t.how;
 
   return (
     <main>
-      <TopBar t={t.nav} onSwitchLang={switchLang} variant="page" />
+      <TopBar t={t.nav} lang={lang} onSelectLang={selectLang} variant="page" />
 
       {/* ── Titre ────────────────────────────────────────── */}
       <header className="mx-auto max-w-[1140px] px-5 pb-12 pt-14 sm:px-7 sm:pb-14 sm:pt-16">

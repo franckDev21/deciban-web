@@ -21,8 +21,7 @@ export function useLang() {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  const switchLang = () => {
-    const next: Lang = lang === "fr" ? "en" : "fr";
+  const selectLang = (next: Lang) => {
     setLang(next);
     try {
       window.localStorage.setItem(LANG_KEY, next);
@@ -31,5 +30,7 @@ export function useLang() {
     }
   };
 
-  return { lang, t: content[lang], switchLang };
+  const switchLang = () => selectLang(lang === "fr" ? "en" : "fr");
+
+  return { lang, t: content[lang], selectLang, switchLang };
 }
