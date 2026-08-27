@@ -10,9 +10,6 @@ import StatusBar from "@/components/StatusBar";
 import BootHero from "@/components/BootHero";
 import { content, type Lang } from "@/lib/content";
 
-const SPEC_URL =
-  "https://claude.ai/code/artifact/19e63939-dbe6-469c-b427-fd1b3ff816b9";
-
 const LANG_KEY = "deciban.lang";
 const STORY_KEY = "deciban.story.seen";
 
@@ -137,16 +134,14 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-1">
-                <a href="#rejoindre" className="btn no-underline">
-                  {t.hero.ctaJoin}
+                <a href="/session" className="btn no-underline">
+                  {t.hero.ctaTry}
                 </a>
-                <a
-                  href={SPEC_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-ghost no-underline"
-                >
+                <a href="/comment-ca-marche" className="btn btn-ghost no-underline">
                   {t.hero.ctaSpec}
+                </a>
+                <a href="#rejoindre" className="btn btn-ghost no-underline">
+                  {t.hero.ctaJoin}
                 </a>
               </div>
 

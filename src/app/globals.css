@@ -410,3 +410,19 @@ table.cat .r {
   font-size: 1.05rem; letter-spacing: 0.04em;
   color: var(--accent); padding: 8px 0;
 }
+
+/* ── Adaptation aux petits ecrans ────────────────────────── */
+@media (max-width: 640px) {
+  .probe-canvas { height: 210px; }          /* plus de place pour le doigt */
+  .probe-panel { max-height: 92vh; overflow-y: auto; }
+  .tl-row { grid-template-columns: 40px 1fr; gap: 12px; }
+  .day-legend { font-size: 0.66rem; gap: 12px; }
+}
+
+/* Cibles tactiles : jamais sous 44 px de hauteur utile. */
+@media (pointer: coarse) {
+  .btn { padding: 15px 24px; }
+  .pill { padding: 13px 14px; }
+  .nav-link, .lang-switch, .why-link { padding: 10px 13px; }
+  .field { padding: 14px 13px; font-size: 16px; }  /* 16px evite le zoom iOS */
+}

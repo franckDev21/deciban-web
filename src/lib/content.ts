@@ -84,6 +84,7 @@ export type Dict = {
     lede: string;
     ctaJoin: string;
     ctaSpec: string;
+    ctaTry: string;
     meta: string[];
   };
   sensor: {
@@ -366,7 +367,8 @@ export const content: Record<Lang, Dict> = {
       ],
       lede: "Un outil libre qui donne aux vrais travailleurs un moyen de prouver qu’ils sont humains. Il ne dénonce personne. Il accumule des preuves, les pèse, et annonce combien il en a.",
       ctaJoin: "Rejoindre l’équipe",
-      ctaSpec: "Lire la spécification",
+      ctaTry: "Tester l’outil maintenant",
+      ctaSpec: "Comment ça marche",
       meta: ["30 signaux, 8 familles", "Code ouvert", "Aucune installation"],
     },
 
@@ -779,7 +781,8 @@ export const content: Record<Lang, Dict> = {
       ],
       lede: "A free tool that gives people who really do the work a way to prove they are human. It reports on nobody. It gathers evidence, weighs it, and tells you how much it has.",
       ctaJoin: "Join the team",
-      ctaSpec: "Read the spec",
+      ctaTry: "Try the tool now",
+      ctaSpec: "How it works",
       meta: ["30 signals, 8 families", "Open source", "Nothing to install"],
     },
 
