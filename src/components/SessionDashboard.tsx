@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ProbeChallenge from "@/components/ProbeChallenge";
 import { sessionCopy } from "@/lib/session";
 import { subscribeToPush } from "@/lib/push";
+import { clearAlert, raiseAlert } from "@/lib/alert";
 import type { Lang } from "@/lib/content";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
@@ -35,7 +36,6 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
   const [perm, setPerm] = useState<NotificationPermission>("default");
   const [pushOn, setPushOn] = useState(false);
 
-  const titleFlash = useRef<ReturnType<typeof setInterval> | null>(null);
   const notified = useRef<string | null>(null);
   // Un controle ecarte a la main ne doit pas revenir au sondage suivant :
   // il sera compte comme manque par le serveur, et c'est le choix de la
@@ -104,48 +104,20 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
     };
   }, [perm, token]);
 
-  /* L'appel : notification, son, titre qui clignote. */
+  /* L'appel : bulle systeme, son, titre et pastille de l'onglet. */
   useEffect(() => {
     if (!due) {
-      if (titleFlash.current) {
-        clearInterval(titleFlash.current);
-        titleFlash.current = null;
-        document.title = "Deciban";
-      }
+      clearAlert();
       notified.current = null;
       return;
     }
     if (notified.current === due.token) return;
     notified.current = due.token;
 
-    if ("Notification" in window && Notification.permission === "granted") {
-      new Notification("Deciban · contrôle en cours", {
-        body: `${due.expires_in} secondes pour répondre`,
-        tag: "deciban-probe",
-        requireInteraction: true,
-      });
-    }
+    raiseAlert(due.expires_in, s.alertTitle, s.alertBody);
+  }, [due, s.alertTitle, s.alertBody]);
 
-    try {
-      const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      const ctx = new Ctx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.frequency.value = 880;
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.45);
-    } catch {
-      /* audio bloqué par le navigateur */
-    }
-
-    if (titleFlash.current) clearInterval(titleFlash.current);
-    titleFlash.current = setInterval(() => {
-      document.title = document.title.startsWith("●") ? "Deciban" : "● CONTRÔLE · Deciban";
-    }, 800);
-  }, [due]);
+  useEffect(() => clearAlert, []);
 
   async function askPermission() {
     if (!("Notification" in window)) return;

@@ -33,6 +33,8 @@ export type SessionDict = {
   copy: string;
   copied: string;
 
+  alertTitle: string;
+  alertBody: string;
   probeTitle: string;
   probeLede: string;
   probeType: string;
@@ -110,6 +112,8 @@ export const sessionCopy: Record<Lang, SessionDict> = {
     copy: "Copier le lien",
     copied: "Copié",
 
+    alertTitle: "Deciban · contrôle en cours",
+    alertBody: "{s} secondes pour répondre",
     probeTitle: "Contrôle en cours",
     probeLede: "Bouge la souris dans le cadre, puis recopie la phrase. Le système mesure ton geste et ton rythme de frappe.",
     probeType: "Recopie cette phrase",
@@ -186,6 +190,8 @@ export const sessionCopy: Record<Lang, SessionDict> = {
     copy: "Copy link",
     copied: "Copied",
 
+    alertTitle: "Deciban · check in progress",
+    alertBody: "{s} seconds to answer",
     probeTitle: "Check in progress",
     probeLede: "Move the mouse inside the frame, then retype the sentence. The system measures your gesture and your typing rhythm.",
     probeType: "Retype this sentence",
