@@ -53,7 +53,7 @@ export const formulas: Record<Lang, {
       ["x_i", "l’observation faite par le signal i"],
       ["w_i", "la preuve apportée par ce signal, en decibans"],
       ["c_f", "le plafond de la famille f"],
-      ["π", "la présomption de départ, proportion supposée de fraude"],
+      ["π", "la présomption de départ : probabilité, AVANT toute observation, que la personne soit humaine. Si l’on raisonne en taux de fraude f, alors π = 1 − f"],
       ["a, m", "contrôles réussis et contrôles manqués"],
     ],
     plates: [
@@ -64,6 +64,8 @@ export const formulas: Record<Lang, {
         reads: "Dix fois le logarithme décimal du rapport entre la fréquence de l’observation chez l’humain et sa fréquence chez la machine.",
         margin: "L’unité est le deciban. Turing l’a créée à Bletchley Park pour additionner des indices dont aucun ne suffit seul. Dix decibans valent un rapport de dix contre un.",
         status: "exact",
+        caveat:
+          "La définition est exacte, mais le code ne l’évalue pas : il n’estime aucune des deux probabilités et attribue à la place des poids fixes par seuils. Cette ligne dit donc ce que les constantes SIGNIFIENT, pas comment elles sont obtenues. Les calculer vraiment est le travail de la calibration.",
       },
       {
         n: "II",
@@ -73,7 +75,7 @@ export const formulas: Record<Lang, {
         margin: "C’est tout l’intérêt du logarithme : au lieu de multiplier des probabilités, on additionne des quantités lisibles et attribuables ligne par ligne. Attention à ne pas écrire cette ligne avec un logit naturel d’un côté et des decibans de l’autre : les deux ne s’additionnent pas.",
         status: "exact",
         caveat:
-          "L’addition suppose les signaux CONDITIONNELLEMENT INDÉPENDANTS sachant la classe. Ils ne le sont pas. C’est précisément ce que le plafond de famille de la planche III vient corriger, à la main et sans démonstration.",
+          "Deux réserves. D’abord l’addition suppose les signaux CONDITIONNELLEMENT INDÉPENDANTS sachant la classe : ils ne le sont pas, et le plafond de la planche III ne fait que limiter les dégâts. Ensuite le code ne franchit jamais cette étape : il s’arrête à la somme des preuves et n’applique aucune présomption. Le verdict se lit donc en decibans, jamais en probabilité, ce qui est délibéré : sur preuve mince, la probabilité ne refléterait que π.",
       },
       {
         n: "III",
@@ -196,7 +198,7 @@ export const formulas: Record<Lang, {
       ["x_i", "the observation made by signal i"],
       ["w_i", "the evidence that signal contributes, in decibans"],
       ["c_f", "the ceiling of family f"],
-      ["π", "the prior, assumed proportion of fraud"],
+      ["π", "the prior: probability, BEFORE any observation, that the person is human. If you think in terms of a fraud rate f, then π = 1 − f"],
       ["a, m", "checks answered and checks missed"],
     ],
     plates: [
@@ -207,6 +209,8 @@ export const formulas: Record<Lang, {
         reads: "Ten times the base-ten logarithm of the ratio between how often the observation occurs in humans and how often it occurs in machines.",
         margin: "The unit is the deciban. Turing created it at Bletchley Park to add up clues where no single one suffices. Ten decibans is a ten-to-one ratio.",
         status: "exact",
+        caveat:
+          "The definition is exact, but the code does not evaluate it: it estimates neither probability and instead assigns fixed weights by threshold. This line therefore states what the constants MEAN, not how they are obtained. Actually computing them is the work of calibration.",
       },
       {
         n: "II",
@@ -216,7 +220,7 @@ export const formulas: Record<Lang, {
         margin: "This is the whole point of the logarithm: instead of multiplying probabilities, you add readable quantities that stay attributable line by line. Take care never to write this line with a natural logit on one side and decibans on the other: the two do not add.",
         status: "exact",
         caveat:
-          "The summation assumes the signals are CONDITIONALLY INDEPENDENT given the class. They are not. That is exactly what the family ceiling of plate III patches up, by hand and without proof.",
+          "Two caveats. First, the summation assumes the signals are CONDITIONALLY INDEPENDENT given the class: they are not, and the ceiling of plate III merely limits the damage. Second, the code never takes this step: it stops at the sum of evidence and applies no prior. The verdict is therefore read in decibans, never as a probability, which is deliberate: on thin evidence the probability would only reflect π.",
       },
       {
         n: "III",
