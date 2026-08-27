@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { SessionDict } from "@/lib/session";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8009/api";
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
+
+/** Un ecran tactile ne produit pas de signal moteur comparable a une souris. */
+const isTouch = () =>
+  typeof window !== "undefined" &&
+  (window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
 
 type Ev = { t: number; type: "move" | "down" | "up"; code?: string; x?: number; y?: number };
 
@@ -23,6 +28,8 @@ export default function ProbeChallenge({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pasted, setPasted] = useState(false);
+  const backspaces = useRef(0);
+  const shownAt = useRef<number>(Date.now());
 
   const events = useRef<Ev[]>([]);
   const t0 = useRef<number>(performance.now());
@@ -52,6 +59,7 @@ export default function ProbeChallenge({
     };
     const onDown = (e: KeyboardEvent) => {
       mark();
+      if (e.key === "Backspace") backspaces.current++;
       events.current.push({ t: stamp(), type: "down", code: e.code });
     };
     const onUp = (e: KeyboardEvent) => {
@@ -123,6 +131,13 @@ export default function ProbeChallenge({
           events: events.current.slice(-3500),
           pasted,
           reaction_ms: firstAction.current,
+          input_mode: isTouch() ? "touch" : "pointer",
+          typed_chars: typed.length,
+          expected_chars: t.probePhrase.length,
+          backspaces: backspaces.current,
+          reading_ms: Date.now() - shownAt.current,
+          reading_words: t.probeLede.split(/\s+/).length,
+          difficulty: 1,
         }),
       });
       const data = await res.json();
@@ -157,7 +172,7 @@ export default function ProbeChallenge({
 
         <p style={{ color: "var(--ink-2)" }}>{t.probeLede}</p>
 
-        <div className="probe-canvas">
+        <div className="probe-canvas" style={{ touchAction: "none" }}>
           <canvas ref={canvasRef} />
         </div>
 
