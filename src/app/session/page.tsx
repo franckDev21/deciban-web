@@ -6,8 +6,9 @@ import TopBar from "@/components/TopBar";
 import ProbeChallenge from "@/components/ProbeChallenge";
 import { useLang } from "@/lib/useLang";
 import { sessionCopy } from "@/lib/session";
+import { subscribeToPush } from "@/lib/push";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8009/api";
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 const KEY = "deciban.session.token";
 const POLL_MS = 15000;
 
@@ -34,6 +35,7 @@ export default function SessionPage() {
   const [copied, setCopied] = useState(false);
   const [minutes, setMinutes] = useState(60);
   const [probes, setProbes] = useState(4);
+  const [pushOn, setPushOn] = useState(false);
 
   const titleFlash = useRef<ReturnType<typeof setInterval> | null>(null);
   const notified = useRef<string | null>(null);
@@ -139,6 +141,9 @@ export default function SessionPage() {
       if (res.ok) {
         window.localStorage.setItem(KEY, data.token);
         setToken(data.token);
+        // L'abonnement echoue silencieusement : l'onglet ouvert reste
+        // un canal d'appel valable, le push n'est qu'un renfort.
+        setPushOn(await subscribeToPush(data.token, data.vapid_public_key ?? null));
       }
     } catch {
       setOnline(false);
@@ -235,6 +240,7 @@ export default function SessionPage() {
                 </span>
                 <span className="num attest-url" style={{ color: online ? "var(--pos)" : "var(--neg)" }}>
                   {s.linkState} · {online ? s.linkOk : s.linkOff}
+                  {pushOn && " · push"}
                 </span>
               </div>
 
