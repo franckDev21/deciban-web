@@ -1,4 +1,4 @@
-const API = process.env.NEXT_PUBLIC_API_URL || "https://deciban.motherlode.studio/api";
+import { API } from "@/lib/api";
 
 function urlBase64ToUint8Array(base64: string): Uint8Array {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
