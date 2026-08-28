@@ -1,0 +1,24 @@
+# Interface Deciban.
+#
+#   cp .env.example .env.local
+#   docker compose up --build
+#
+# L'API n'est pas incluse : elle vit dans son propre depot.
+# Deux facons de la joindre :
+#
+#   - en local, lancez d'abord deciban-api, puis laissez la valeur par
+#     defaut ci-dessous
+#   - a distance, pointez NEXT_PUBLIC_API_URL vers l'API deployee
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        # host.docker.internal permet au conteneur de joindre une API
+        # qui tourne sur la machine hote, hors de ce compose.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://host.docker.internal:8000/api}
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

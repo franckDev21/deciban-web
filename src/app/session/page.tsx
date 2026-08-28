@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TopBar from "@/components/TopBar";
 import { useLang } from "@/lib/useLang";
 import { sessionCopy } from "@/lib/session";
@@ -10,6 +10,15 @@ import { subscribeToPush } from "@/lib/push";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 const KEY = "deciban.session.token";
+
+function readPreviousToken(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(KEY);
+  } catch {
+    return null;
+  }
+}
 
 export default function StartSession() {
   const router = useRouter();
@@ -20,15 +29,9 @@ export default function StartSession() {
   const [probes, setProbes] = useState(4);
   const [handle, setHandle] = useState("");
   const [starting, setStarting] = useState(false);
-  const [previous, setPrevious] = useState<string | null>(null);
-
-  useEffect(() => {
-    try {
-      setPrevious(window.localStorage.getItem(KEY));
-    } catch {
-      /* stockage indisponible */
-    }
-  }, []);
+  // Lu dans l'initialiseur plutot que dans un effet : un setState
+  // synchrone au montage declenche un rendu en cascade inutile.
+  const [previous] = useState<string | null>(readPreviousToken);
 
   async function start() {
     setStarting(true);

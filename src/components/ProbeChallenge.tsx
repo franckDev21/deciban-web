@@ -39,17 +39,25 @@ export default function ProbeChallenge({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pasted, setPasted] = useState(false);
+  // Compteur d'evenements expose en etat : une ref ne peut pas etre lue
+  // pendant le rendu sans rendre celui-ci dependant d'une valeur muable.
+  const [captured, setCaptured] = useState(0);
   const backspaces = useRef(0);
-  const shownAt = useRef<number>(Date.now());
+  const shownAt = useRef<number>(0);
 
   const events = useRef<Ev[]>([]);
-  const t0 = useRef<number>(performance.now());
+  const t0 = useRef<number>(0);
   const firstAction = useRef<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pts = useRef<{ x: number; y: number }[]>([]);
 
   /* ── Capture ── */
   useEffect(() => {
+    // L'horloge demarre au montage, jamais pendant le rendu : appeler
+    // performance.now() pendant un rendu le rend impur.
+    t0.current = performance.now();
+    shownAt.current = Date.now();
+
     const stamp = () => performance.now() - t0.current;
     const mark = () => {
       if (firstAction.current === null) firstAction.current = stamp();
@@ -94,7 +102,8 @@ export default function ProbeChallenge({
     const ctx = c.getContext("2d");
     if (!ctx) return;
     let raf = 0;
-    const draw = () => {
+    let lastCount = 0;
+    const draw = (now: number) => {
       const r = c.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       if (c.width !== r.width * dpr) {
@@ -119,6 +128,13 @@ export default function ProbeChallenge({
         ctx.stroke();
       }
       ctx.globalAlpha = 1;
+
+      // Publie le volume capture a cadence reduite : le bouton d'envoi en
+      // depend, et il ne peut pas lire une ref pendant le rendu.
+      if (now - lastCount > 200) {
+        lastCount = now;
+        setCaptured(events.current.length);
+      }
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
@@ -182,7 +198,7 @@ export default function ProbeChallenge({
 
   const expired = left === 0;
   const matches = normalise(typed) === normalise(t.probePhrase);
-  const ready = matches && events.current.length > 20 && !expired;
+  const ready = matches && captured > 20 && !expired;
 
   return (
     <div className="probe-overlay" onClick={(e) => { if (e.target === e.currentTarget) onDismiss(); }}>

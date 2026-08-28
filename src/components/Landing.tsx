@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Guilloche from "@/components/Guilloche";
 import LiveSignature from "@/components/LiveSignature";
@@ -8,60 +9,41 @@ import StoryModal from "@/components/StoryModal";
 import TopBar from "@/components/TopBar";
 import StatusBar from "@/components/StatusBar";
 import BootHero from "@/components/BootHero";
-import { content, type Lang } from "@/lib/content";
+import { useLang } from "@/lib/useLang";
 
-const LANG_KEY = "deciban.lang";
 const STORY_KEY = "deciban.story.seen";
 
+function storyAlreadySeen(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return !!window.localStorage.getItem(STORY_KEY);
+  } catch {
+    return false;
+  }
+}
+
 export default function Landing({ variant = "origin" }: { variant?: "origin" | "phosphore" }) {
-  const [lang, setLang] = useState<Lang>("fr");
   const [storyOpen, setStoryOpen] = useState(false);
+  const [seen] = useState(storyAlreadySeen);
   const [step, setStep] = useState(0);
-  const [nudge, setNudge] = useState(false);
+  // Le halo n'apparait que pour qui a deja vu le recit : il signale le
+  // lien qui permet de le relire. Calcule des le premier rendu.
+  const [nudge, setNudge] = useState(() => storyAlreadySeen());
   const whyRef = useRef<HTMLButtonElement>(null);
 
-  const t = content[lang];
+  const { lang, t, selectLang } = useLang();
   const phos = variant === "phosphore";
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-  }, [lang]);
-
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(LANG_KEY);
-      if (saved === "en" || saved === "fr") setLang(saved);
-    } catch {
-      /* stockage indisponible */
-    }
-
-    let seen = false;
-    try {
-      seen = !!window.localStorage.getItem(STORY_KEY);
-    } catch {
-      /* stockage indisponible */
-    }
-
     if (!seen) {
       const timer = setTimeout(() => setStoryOpen(true), 900);
       return () => clearTimeout(timer);
     }
 
-    // Deja vu : on attire l'oeil sur le lien qui rouvre l'histoire.
     whyRef.current?.focus({ preventScroll: true });
-    setNudge(true);
     const stop = setTimeout(() => setNudge(false), 4200);
     return () => clearTimeout(stop);
-  }, []);
-
-  const selectLang = (next: Lang) => {
-    setLang(next);
-    try {
-      window.localStorage.setItem(LANG_KEY, next);
-    } catch {
-      /* stockage indisponible */
-    }
-  };
+  }, [seen]);
 
   const openStory = () => {
     setStep(0);
@@ -128,12 +110,12 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-1">
-                <a href="/session" className="btn no-underline">
+                <Link href="/session" className="btn no-underline">
                   {t.hero.ctaTry}
-                </a>
-                <a href="/comment-ca-marche" className="btn btn-ghost no-underline">
+                </Link>
+                <Link href="/comment-ca-marche" className="btn btn-ghost no-underline">
                   {t.hero.ctaSpec}
-                </a>
+                </Link>
                 <a href="#rejoindre" className="btn btn-ghost no-underline">
                   {t.hero.ctaJoin}
                 </a>
@@ -152,6 +134,9 @@ export default function Landing({ variant = "origin" }: { variant?: "origin" | "
             {/* Portrait grave, pose dans le guillochis comme sur un billet. */}
             <figure className="portrait">
               <div className="portrait-plate">
+                {/* eslint-disable-next-line @next/next/no-img-element --
+                    image locale de 20 Ko, dimensions fixes, et le masque CSS
+                    du portrait ne survivrait pas au conteneur de next/image */}
                 <img src="/images/alan-turing.jpeg" alt={t.hero.portraitAlt} />
               </div>
               <figcaption className="portrait-cap">

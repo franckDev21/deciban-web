@@ -5,6 +5,21 @@ import { useEffect, useRef, useState } from "react";
 const NAME = "deciban";
 const SESSION_KEY = "deciban.booted";
 
+/**
+ * On ne rejoue jamais l'animation dans la meme session : au bout de la
+ * troisieme visite, attendre que le titre se tape devient penible.
+ * Cote serveur, on suppose qu'elle doit jouer.
+ */
+function shouldSkipAnimation(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+    return !!window.sessionStorage.getItem(SESSION_KEY);
+  } catch {
+    return false;
+  }
+}
+
 type Line = { tag: string; label: string; value: string; tone: string };
 
 export default function BootHero({
@@ -14,29 +29,17 @@ export default function BootHero({
   lines: Line[];
   command: string;
 }) {
-  // -1 : rien. 0..NAME.length : caracteres tapes. >length : sequence de boot.
-  const [typed, setTyped] = useState(0);
-  const [bootShown, setBootShown] = useState(0);
-  const [done, setDone] = useState(false);
+  // Une personne qui a deja vu la sequence, ou qui refuse les animations,
+  // doit voir le resultat final des le premier rendu. Le calcul se fait
+  // dans l'initialiseur pour ne pas declencher un rendu en cascade.
+  const [skip] = useState(shouldSkipAnimation);
+  const [typed, setTyped] = useState(() => (skip ? NAME.length : 0));
+  const [bootShown, setBootShown] = useState(() => (skip ? lines.length : 0));
+  const [done, setDone] = useState(() => skip);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let alreadyBooted = false;
-    try {
-      alreadyBooted = !!window.sessionStorage.getItem(SESSION_KEY);
-    } catch {
-      /* stockage indisponible */
-    }
-
-    // On ne rejoue jamais l'animation dans la meme session : au bout de la
-    // troisieme visite, attendre que le titre se tape devient penible.
-    if (reduce || alreadyBooted) {
-      setTyped(NAME.length);
-      setBootShown(lines.length);
-      setDone(true);
-      return;
-    }
+    if (skip) return;
 
     const push = (fn: () => void, ms: number) => {
       timers.current.push(setTimeout(fn, ms));
@@ -63,7 +66,7 @@ export default function BootHero({
 
     const list = timers.current;
     return () => list.forEach(clearTimeout);
-  }, [lines.length]);
+  }, [lines.length, skip]);
 
   return (
     <div className="flex flex-col gap-7">

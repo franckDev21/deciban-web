@@ -12,6 +12,13 @@ const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 const KEY = "deciban.session.token";
 const POLL_MS = 15000;
 
+/** Lue a l'initialisation : un setState synchrone au montage declenche
+ *  un rendu en cascade que le rendu serveur ne peut pas anticiper. */
+function readPermission(): NotificationPermission {
+  if (typeof window === "undefined" || !("Notification" in window)) return "default";
+  return Notification.permission;
+}
+
 type Report = {
   slug: string;
   handle: string | null;
@@ -33,7 +40,7 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
   const [online, setOnline] = useState(true);
   const [missing, setMissing] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [perm, setPerm] = useState<NotificationPermission>("default");
+  const [perm, setPerm] = useState<NotificationPermission>(readPermission);
   const [pushOn, setPushOn] = useState(false);
 
   const notified = useRef<string | null>(null);
@@ -44,7 +51,6 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
 
   useEffect(() => {
     window.localStorage.setItem(KEY, token);
-    if ("Notification" in window) setPerm(Notification.permission);
   }, [token]);
 
   const poll = useCallback(async () => {
@@ -68,6 +74,10 @@ export default function SessionDashboard({ token, lang }: { token: string; lang:
   }, [token]);
 
   useEffect(() => {
+    // poll est asynchrone : son premier setState survient apres l'await
+    // du fetch, donc jamais pendant le rendu. La regle ne distingue pas
+    // les fonctions async, d'ou la desactivation ciblee.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     poll();
     const id = setInterval(poll, POLL_MS);
     return () => clearInterval(id);

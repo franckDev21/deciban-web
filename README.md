@@ -8,20 +8,22 @@ Next.js 16 · TypeScript · Tailwind CSS 4 · KaTeX · Vitest
 
 ## Démarrer
 
-### Avec Docker, recommandé
+> **L'API vit dans un dépôt séparé** : [deciban-api](https://github.com/franckDev21/deciban-api). Lancez-la avant, sinon la page de session restera muette.
 
-Depuis la racine du dépôt, la pile complète en une commande :
+### Avec Docker
 
 ```bash
+git clone git@github.com:franckDev21/deciban-web.git
+cd deciban-web
+cp .env.example .env.local
 docker compose up --build
 ```
 
+Le conteneur joint l'API sur la machine hôte via `host.docker.internal`. Pour viser une API déployée, définissez `NEXT_PUBLIC_API_URL` avant de construire.
+
 ### En local
 
-L'API doit tourner à côté, sinon la page de session restera muette.
-
 ```bash
-cd web
 npm install
 cp .env.example .env.local
 npm run dev
@@ -142,10 +144,10 @@ Si vous entendez le son sans voir de bulle, l'autorisation est refusée : dans l
 
 Prévu sur Vercel. Une seule variable à définir : `NEXT_PUBLIC_API_URL`, pointant vers l'API en production.
 
-Le dépôt étant un monorepo, configurez **Root Directory** à `web` dans les réglages du projet Vercel.
+Une seule chose à régler côté Vercel : la variable `NEXT_PUBLIC_API_URL`. Le dépôt étant dédié à l'interface, le répertoire racine par défaut convient.
 
 ---
 
 ## Contribuer
 
-Voir [CONTRIBUTING.md](../CONTRIBUTING.md) à la racine du dépôt.
+Voir [CONTRIBUTING.md](CONTRIBUTING.md).
