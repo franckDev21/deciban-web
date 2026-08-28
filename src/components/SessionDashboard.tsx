@@ -8,7 +8,7 @@ import { subscribeToPush } from "@/lib/push";
 import { clearAlert, raiseAlert } from "@/lib/alert";
 import type { Lang } from "@/lib/content";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "https://deciban.motherlode.studio/api";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://deciban.motherlode.studio/api";
 const KEY = "deciban.session.token";
 const POLL_MS = 15000;
 

@@ -5,7 +5,7 @@ import TopBar from "@/components/TopBar";
 import { useLang } from "@/lib/useLang";
 import { sessionCopy } from "@/lib/session";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "https://deciban.motherlode.studio/api";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://deciban.motherlode.studio/api";
 
 type Report = {
   slug: string;
