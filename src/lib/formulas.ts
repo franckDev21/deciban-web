@@ -16,17 +16,17 @@ export type Plate = {
 export const statusLabel: Record<Lang, Record<PlateStatus, string>> = {
   fr: {
     exact: "exact",
-    heuristique: "heuristique assumee",
+    heuristique: "heuristique assumée",
     approx: "approximation",
-    inerte: "implemente mais inerte",
-    absent: "specifie, pas implemente",
+    inerte: "prête, pas encore activée",
+    absent: "à construire",
   },
   en: {
     exact: "exact",
     heuristique: "acknowledged heuristic",
     approx: "approximation",
-    inerte: "implemented but inert",
-    absent: "specified, not implemented",
+    inerte: "ready, not yet active",
+    absent: "to be built",
   },
 };
 
@@ -46,7 +46,7 @@ export const formulas: Record<Lang, {
   fr: {
     eyebrow: "Planche de démonstration",
     title: "Le moteur, en dix lignes",
-    lede: "Pour qui veut vérifier plutôt que croire. Chaque ligne est celle qui tourne dans le code, avec l’intention en marge.",
+    lede: "Pour qui veut vérifier plutôt que croire. Chaque ligne est celle qui tourne dans le code, avec l’intention en marge et son statut à droite. Une planche où tout serait marqué « exact » ne prouverait rien : c’est ce qu’écrirait n’importe qui. Ce sont les lignes signalées comme heuristiques ou à construire qui rendent les autres vérifiables.",
     legendTitle: "Notations",
     legend: [
       ["H, M", "les deux hypothèses : la trace vient d’un humain, ou d’une machine"],
