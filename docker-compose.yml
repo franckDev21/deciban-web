@@ -17,7 +17,7 @@ services:
       args:
         # host.docker.internal permet au conteneur de joindre une API
         # qui tourne sur la machine hote, hors de ce compose.
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://host.docker.internal:8000/api}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://deciban.motherlode.studio/api}
     ports:
       - "3000:3000"
     extra_hosts:

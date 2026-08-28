@@ -8,7 +8,7 @@ import { useLang } from "@/lib/useLang";
 import { sessionCopy } from "@/lib/session";
 import { subscribeToPush } from "@/lib/push";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://deciban.motherlode.studio/api";
 const KEY = "deciban.session.token";
 
 function readPreviousToken(): string | null {

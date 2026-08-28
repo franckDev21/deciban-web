@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { SessionDict } from "@/lib/session";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://deciban.motherlode.studio/api";
 
 /** Un ecran tactile ne produit pas de signal moteur comparable a une souris. */
 /** On compare le sens, pas la typographie : accents et casse ne bloquent pas. */

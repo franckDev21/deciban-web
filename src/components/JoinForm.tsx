@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Dict } from "@/lib/content";
 
 const API =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
+  process.env.NEXT_PUBLIC_API_URL ?? "https://deciban.motherlode.studio/api";
 
 
 type Errors = Record<string, string[]>;
